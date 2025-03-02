@@ -41,13 +41,21 @@ groundMesh.castShadow = false;
 groundMesh.receiveShadow = true;
 scene.add(groundMesh);
 
-const spotLight = new THREE.SpotLight(0xffffff, 1000, 100, 0.22, 1);
+const spotLight = new THREE.SpotLight(0xffffff, 3000, 100, 0.22, 1);
 spotLight.position.set(0, 25, 0);
 spotLight.castShadow = true;
 spotLight.shadow.bias = -0.0001;
 scene.add(spotLight);
 
 const loader = new GLTFLoader().setPath('./public/model/');
+const textureLoader = new THREE.TextureLoader();
+const woodTexture = textureLoader.load('public/texture/Mahagony.jpg');
+
+const woodMaterial = new THREE.MeshStandardMaterial({
+    map: woodTexture,
+    roughness: 0.7,
+    metalness: 0.5
+});
 loader.load('Chair_1v2.gltf', (gltf) => {
   console.log('Model Loaded:', gltf.scene); // Check if the model is loaded
   const mesh = gltf.scene;
@@ -60,10 +68,11 @@ loader.load('Chair_1v2.gltf', (gltf) => {
     if (child.isMesh) {
       child.castShadow = true;
       child.receiveShadow = true;
+      child.material = woodMaterial;
     }
   });
 
-  mesh.position.set(0, 2.95, 0);
+  mesh.position.set(0, 2.50, 0);
   mesh.rotation.set(-Math.PI / 2,0,0);
   mesh.scale.set(0.005, 0.005, 0.005); // Increase size if too small
   scene.add(mesh);

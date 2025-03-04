@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+let i = 0;
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -47,35 +48,79 @@ spotLight.castShadow = true;
 spotLight.shadow.bias = -0.0001;
 scene.add(spotLight);
 
+// Array of texture names
+const textureNames = ['wood', 'Mahagony', 'Redwood', 'leaf', 'Gold', 'Ruby2', 'Silver', 'Diamond'];
+
 const loader = new GLTFLoader().setPath('./public/model/');
 const textureLoader = new THREE.TextureLoader();
-const woodTexture = textureLoader.load('public/texture/Mahagony.jpg');
 
-const woodMaterial = new THREE.MeshStandardMaterial({
-    map: woodTexture,
+// Global variable to store the chair mesh
+let chairMesh;
+
+// Function to load and apply texture
+function applyTexture(textureName) {
+  const texture = textureLoader.load(`public/texture/${textureName}.jpg`);
+  const material = new THREE.MeshStandardMaterial({
+    map: texture,
     roughness: 0.7,
     metalness: 0.5
-});
+  });
+
+  // Apply the new material to all meshes in the chair
+  if (chairMesh) {
+    chairMesh.traverse((child) => {
+      if (child.isMesh) {
+        child.material = material;
+      }
+    });
+  }
+}
+
+// Global function to change texture randomly
+window.Change = function() {
+  // Select a random texture index
+  i = Math.floor(Math.random() * textureNames.length);
+  
+  // Apply the random texture
+  applyTexture(textureNames[i]);
+};
+
+// Global function to go to next texture
+window.NextTexture = function() {
+  // Increment texture index, wrapping around to 0 when it reaches the end
+  i = (i + 1) % textureNames.length;
+  
+  // Apply the next texture
+  applyTexture(textureNames[i]);
+};
+
+// Global function to go to previous texture
+window.PreviousTexture = function() {
+  // Decrement texture index, wrapping around to the last index when it goes below 0
+  i = (i - 1 + textureNames.length) % textureNames.length;
+  
+  // Apply the previous texture
+  applyTexture(textureNames[i]);
+};
+
 loader.load('Chair_1v2.gltf', (gltf) => {
-  console.log('Model Loaded:', gltf.scene); // Check if the model is loaded
-  const mesh = gltf.scene;
-  mesh.position.set(0, 1.05, -1);
-  scene.add(mesh);
+  console.log('Model Loaded:', gltf.scene);
+  chairMesh = gltf.scene;
+  chairMesh.position.set(-1, 2.40, -1);
+  chairMesh.rotation.set(-Math.PI / 2, 0, 0);
+  chairMesh.scale.set(0.005, 0.005, 0.005);
 
+  // Apply initial texture
+  applyTexture(textureNames[i]);
 
-
-  mesh.traverse((child) => {
+  chairMesh.traverse((child) => {
     if (child.isMesh) {
       child.castShadow = true;
       child.receiveShadow = true;
-      child.material = woodMaterial;
     }
   });
 
-  mesh.position.set(0, 2.50, 0);
-  mesh.rotation.set(-Math.PI / 2,0,0);
-  mesh.scale.set(0.005, 0.005, 0.005); // Increase size if too small
-  scene.add(mesh);
+  scene.add(chairMesh);
 
   document.getElementById('progress-container').style.display = 'none';
 }, (xhr) => {

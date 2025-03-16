@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Millennium Falcon</title>
+		<title>3D Chair Showcase</title>
 
 		<link rel="stylesheet" href="public/index.css">
 
@@ -18,16 +18,35 @@
 	</head>
 	<body>
     <div id="heading">
-      <h1>THE CHAIR</h1>
-      <div class="button-container">
-        <button onclick="PreviousTexture()">Previous Texture</button>
-        <button onclick="Change()">Random Texture</button>
-        <button onclick="NextTexture()">Next Texture</button>
+      <!--<h1>THE CHAIR</h1>-->
+      <div class="material-display">
+        <p>Current Material: <span id="material-name">Wood</span></p>
       </div>
-      <!---<div class="border"></div>--->
+      <div class="controls-container">
+        <div class="button-group">
+          <p>Material Controls:</p>
+          <div class="button-container">
+            <button onclick="PreviousTexture()">Previous</button>
+            <button onclick="Change()">Random</button>
+            <button onclick="NextTexture()">Next</button>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <p>View Controls:</p>
+          <div class="button-container">
+            <button id="rotate-button" onclick="ToggleRotation()">Auto Rotate</button>
+            <button onclick="ResetView()">Reset View</button>
+          </div>
+        </div>
+      </div>
+     <!---- <div class="instructions">
+        <p>Mouse: Left-click + Drag to rotate | Scroll to zoom | Right-click + Drag to pan</p>
+      </div>
+      <div class="border"></div>--->
     </div>
     <div id="progress-container">
-      <div id="progress">Engaging Hyperdrive...</div>
+      <div id="progress">Loading Model...</div>
     </div>
 		<script type="module" src="./main.js"></script>
 	</body>

@@ -234,7 +234,7 @@ const materials = [
   }
 
 // Load and position your 3D model
-function loadAndPositionModel() {
+/*function loadAndPositionModel() {
   const loader = new GLTFLoader();
   
   loader.load('path/to/your-model.glb', (gltf) => {
@@ -258,10 +258,10 @@ function loadAndPositionModel() {
     
     console.log('Model loaded and positioned on floor');
   });
-}
+}*/
 
   createSkyboxManually();
-  loadAndPositionModel();
+  //loadAndPositionModel();
 
 const loader = new GLTFLoader().setPath('./public/model/');
 
